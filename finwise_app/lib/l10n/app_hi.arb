@@ -1,0 +1,16 @@
+{
+  "appName": "पंजाब एंड सिंध बैंक",
+  "welcome": "स्वागत है",
+  "slogan": "जहाँ सेवा एक जीवन शैली है",
+  "login": "लॉगिन",
+  "learn": "सीखें",
+  "security": "सुरक्षा",
+  "tools": "उपकरण",
+  "home": "होम",
+  "settings": "सेटिंग्स",
+  "language": "भाषा",
+  "selectLanguage": "भाषा चुनें",
+  "notifications": "सूचनाएं",
+  "darkMode": "डार्क मोड",
+  "restartRequired": "परिवर्तन लागू करने के लिए कृपया ऐप को पुनः आरंभ करें"
+} 
