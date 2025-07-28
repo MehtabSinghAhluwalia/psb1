@@ -1,0 +1,11 @@
+flask
+flask_cors
+scikit-learn
+tldextract
+python-whois
+joblib
+beautifulsoup4
+pandas
+requests
+numpy 
+googletrans==4.0.0rc1 
