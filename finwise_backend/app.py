@@ -118,5 +118,24 @@ def recommend_insurance():
             risk = translate_text(risk, target_lang)
     return jsonify(result)
 
+@app.route('/translate', methods=['POST'])
+def translate():
+    try:
+        data = request.get_json()
+        if not data or 'text' not in data:
+            return jsonify({'error': 'Text is required'}), 400
+        
+        text = data.get('text')
+        target_lang = data.get('target_lang', 'en')
+        
+        if not text:
+            return jsonify({'error': 'Text cannot be empty'}), 400
+        
+        translated_text = translate_text(text, target_lang)
+        return jsonify({'translated_text': translated_text})
+    
+    except Exception as e:
+        return jsonify({'error': f'Translation failed: {str(e)}'}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001) 
