@@ -3,7 +3,7 @@ from flask_cors import CORS
 from phishing_model import check_phishing
 from inflation_model import predict_inflation_rate
 from translation_model import translate_text
-# from models import db, User  # Commented out for deployment
+from models import db, User
 from account_type_model import recommend_account_type_logic
 from savings_method_model import recommend_savings_method_logic
 from budget_model import recommend_budget_logic
@@ -13,24 +13,26 @@ from insurance_model import recommend_insurance_logic
 app = Flask(__name__)
 CORS(app)
 
-# Database configuration commented out for deployment
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://apple@localhost/archive'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db.init_app(app)
-# with app.app_context():
-#     db.create_all()
+# Configure your database URI here (PostgreSQL example)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://apple@localhost/archive'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# @app.route('/register', methods=['POST'])
-# def register_user():
-#     data = request.get_json()
-#     if not data or 'name' not in data or 'email' not in data:
-#         return jsonify({'error': 'Name and email are required'}), 400
-#     if User.query.filter_by(email=data['email']).first():
-#         return jsonify({'error': 'Email already registered'}), 400
-#     user = User(name=data['name'], email=data['email'])
-#     db.session.add(user)
-#     db.session.commit()
-#     return jsonify({'message': 'User registered successfully'})
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/register', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    if not data or 'name' not in data or 'email' not in data:
+        return jsonify({'error': 'Name and email are required'}), 400
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'error': 'Email already registered'}), 400
+    user = User(name=data['name'], email=data['email'])
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': 'User registered successfully'})
 
 @app.route('/api/check', methods=['POST'])
 def api_check_url():
@@ -116,24 +118,5 @@ def recommend_insurance():
             risk = translate_text(risk, target_lang)
     return jsonify(result)
 
-@app.route('/translate', methods=['POST'])
-def translate():
-    try:
-        data = request.get_json()
-        if not data or 'text' not in data:
-            return jsonify({'error': 'Text is required'}), 400
-        
-        text = data.get('text')
-        target_lang = data.get('target_lang', 'en')
-        
-        if not text:
-            return jsonify({'error': 'Text cannot be empty'}), 400
-        
-        translated_text = translate_text(text, target_lang)
-        return jsonify({'translated_text': translated_text})
-    
-    except Exception as e:
-        return jsonify({'error': f'Translation failed: {str(e)}'}), 500
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001) 
+    app.run(debug=True, port=5001) 
